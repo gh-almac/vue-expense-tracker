@@ -44,8 +44,6 @@ const onSubmit = () => {
 
     emit('transactionSubmitted', transactionData);
 
-    console.log('submit', text.value, amount.value);
-
     text.value = '';
     amount.value = '';
 

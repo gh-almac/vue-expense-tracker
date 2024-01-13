@@ -3,7 +3,7 @@
   <div class="container">
     <Balance :total="+total" />
     <IncomeExpenses :income="+income" :expenses="+expenses" />
-    <TransactionList :transactions="transactions" @transactionDeleted="handleTransactionDeleted" />
+    <TransactionList :transactions="transactions" @transactionDeleted="handleTransactionDeleted" @transactionUpdated="handleTransactionUpdated" />
     <AddTransaction @transactionSubmitted="handleTransactionSubmitted" />
   </div>
 </template>
@@ -27,7 +27,6 @@ onMounted(() => {
   if(savedTransactions) {
     transactions.value = savedTransactions;
   }
-
 });
 
 //get total
@@ -60,8 +59,7 @@ const handleTransactionSubmitted = (transactionData) => {
     });
 
     saveTransactionsToLocalStorage();
-    toast.success('Transaction added successfully.');
-    console.log(generateUniqueId());
+    toast.success('Transaction added successfully...');
 };
 
 //generate unique id
@@ -76,10 +74,21 @@ const handleTransactionDeleted = (id) => {
     toast.success('Transaction deleted successfully.');
 };
 
+//update existing transtaction
+const handleTransactionUpdated = (id, newAmount) => {
+
+  const transaction = transactions.value.find(transaction => transaction.id === id);
+
+  if(transaction) {
+    transaction.amount = newAmount;
+    saveTransactionsToLocalStorage();
+    toast.success('Transaction updated successfully.');
+  }
+
+};
+
 //save to localStorage
 const saveTransactionsToLocalStorage = () => {
-
     localStorage.setItem('transactions', JSON.stringify(transactions.value));
-
 };
 </script>
